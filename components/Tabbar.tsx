@@ -73,7 +73,7 @@ export default class Tabbar extends React.PureComponent<TabbarProps> {
 		return (
 			<>
 				<View {...{ width, height }}>
-					<AnimatedSvg width={width * 2} style={{transform : [{ translateX }] }} {...{ height }}>
+					<AnimatedSvg width={width * 2.5} style={{transform : [{ translateX }] }} {...{ height }}>
 						<Path {...{ d }} fill="white" />
 					</AnimatedSvg>
 					<View style={StyleSheet.absoluteFill}>

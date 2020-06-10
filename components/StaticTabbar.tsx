@@ -1,74 +1,121 @@
-import * as React from "react";
-import {
-  View, StyleSheet, TouchableWithoutFeedback, Animated, Dimensions,
-} from "react-native";
-import { Feather as Icon } from "@expo/vector-icons";
+import * as React from 'react';
+import { View, StyleSheet, TouchableWithoutFeedback, Animated, Dimensions } from 'react-native';
+import { Feather as Icon } from '@expo/vector-icons';
 
 interface Tab {
-    name : string
+	name: string;
 }
 
 interface StaticTabbarProps {
-    tabs: Tab[];
-    value: Animated.Value;
+	tabs: Tab[];
+	value: Animated.Value;
 }
 
 export const tabHeight = 64;
-const { width } = Dimensions.get("window")
+const { width } = Dimensions.get('window');
 
-export default class StaticTabbar extends React.PureComponent<StaticTabbarProps>{
-    onPress = (index: number) => {
-        const {value, tabs} = this.props;
+export default class StaticTabbar extends React.PureComponent<StaticTabbarProps> {
+    values: Animated.Value[] = [];
+
+    constructor(props: StaticTabbarProps) {
+        super(props);
+        const { tabs } = this.props;
+        this.values = tabs.map((tab, index) => new Animated.Value(index === 0 ? 1 : 0));
+      }
+
+      onPress = (index: number) => {
+        const { value, tabs } = this.props;
         const tabWidth = width / tabs.length;
-        Animated.spring(value, {
-            toValue: -width + tabWidth * index,
-            useNativeDriver: true,
-        }).start();
-    };
+        Animated.sequence([
+            ...this.values.map(value => Animated.timing(value, {
+                toValue: 0,
+                duration: 100,
+                useNativeDriver: true
+            })),
+            Animated.parallel([
+                Animated.spring(this.values[index], {
+                    toValue: 1,
+                    useNativeDriver: true
+                }),
+                Animated.spring(value, {
+                    toValue: -width + tabWidth * index,
+                    useNativeDriver: true,
+                })
+            ])
 
-    render(){
-        const { tabs, value } = this.props;
-        const tabWidth = width / tabs.length;
+        ]).start();
+      }
 
-        return(
-            <View style={styles.container}>
-                {
-                    tabs.map(({ name }, key) => {
-                        const opacity = value.interpolate({
-                            inputRange: [-width + tabWidth * (key - 1), -width + tabWidth * key, -width + tabWidth * (key + 1)],
-                            outputRange: [1,0,1],
-                            extrapolate: "clamp"
-                        });
-                        return (
-                            <TouchableWithoutFeedback onPress={() => this.onPress(key)} {...{key}}>
-                                <Animated.View style={[styles.tab, { opacity }]}>
-                                    <Icon size={25} {...{name}} />
-                                </Animated.View>
-                            </TouchableWithoutFeedback>
-                        );
-                    })
-                }
-            </View>
-        );
-    }
+	render() {
+		const { tabs, value } = this.props;
+		const tabWidth = width / tabs.length;
+
+		return (
+			<View style={styles.container}>
+				{tabs.map(({ name }, key) => {
+                    const activeValue = this.values[key];
+					const opacity = value.interpolate({
+						inputRange: [
+							-width + tabWidth * (key - 1),
+							-width + tabWidth * key,
+							-width + tabWidth * (key + 1),
+						],
+						outputRange: [1, 0, 1],
+						extrapolate: 'clamp',
+                    });
+                    const translateY = activeValue.interpolate({
+                        inputRange: [0,1],
+                        outputRange: [tabHeight, 0]
+                    });
+					return (
+						<React.Fragment {...{ key }}>
+							<TouchableWithoutFeedback onPress={() => this.onPress(key)}>
+								<Animated.View style={[styles.tab, { opacity }]}>
+									<Icon size={25} {...{ name }} />
+								</Animated.View>
+							</TouchableWithoutFeedback>
+							<Animated.View
+								style={{
+									position: 'absolute',
+									top: -8,
+									width: tabWidth,
+									left: tabWidth * key,
+									height: tabHeight,
+									justifyContent: 'center',
+                                    alignItems: 'center',
+                                    transform: [{
+                                        translateY
+                                    }]
+								}}
+							>
+								<View style={styles.activeIcon}>
+									<Icon size={25} {...{ name }} />
+								</View>
+							</Animated.View>
+						</React.Fragment>
+					);
+				})}
+			</View>
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flexDirection: "row",
-    },
-    tab: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      height: 64,
-    },
-    activeIcon: {
-      backgroundColor: "white",
-      width: 40,
-      height: 40,
-      borderRadius: 20,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-  });
+	container: {
+		flexDirection: 'row',
+	},
+	tab: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: 64,
+	},
+	activeIcon: {
+		backgroundColor: 'white',
+		width: 40,
+		height: 40,
+		borderRadius: 20,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+});
