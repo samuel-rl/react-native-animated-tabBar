@@ -3,10 +3,9 @@ import { SafeAreaView, StyleSheet, Dimensions, View, Animated } from 'react-nati
 import * as shape from 'd3-shape';
 import Svg, { Path } from 'react-native-svg';
 
-import StaticTabbar from "./StaticTabbar"
+import StaticTabbar, { tabHeight as height } from "./StaticTabbar"
 
 const { width } = Dimensions.get('window');
-const height = 64;
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 const tabs = [
 	{
