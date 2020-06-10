@@ -65,15 +65,19 @@ const d = `${left} ${tab} ${right}`;
 interface TabbarProps {}
 
 export default class Tabbar extends React.PureComponent<TabbarProps> {
+
+    value = new Animated.Value(-width);
+
 	render() {
+        const { value: translateX } = this;
 		return (
 			<>
 				<View {...{ width, height }}>
-					<AnimatedSvg width={width * 2} {...{ height }}>
+					<AnimatedSvg width={width * 2} style={{transform : [{ translateX }] }} {...{ height }}>
 						<Path {...{ d }} fill="white" />
 					</AnimatedSvg>
 					<View style={StyleSheet.absoluteFill}>
-                        <StaticTabbar {...{ tabs }} />
+                        <StaticTabbar value={translateX} {...{ tabs}} />
                     </View>
 				</View>
 				<SafeAreaView style={styles.safeArea} />

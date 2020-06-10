@@ -10,18 +10,29 @@ interface Tab {
 
 interface StaticTabbarProps {
     tabs: Tab[];
+    value: Animated.Value;
 }
 
 export const tabHeight = 64;
+const { width } = Dimensions.get("window")
 
 export default class StaticTabbar extends React.PureComponent<StaticTabbarProps>{
+    onPress = (index: number) => {
+        const {value, tabs} = this.props;
+        const tabWidth = width / tabs.length;
+        Animated.spring(value, {
+            toValue: -width + tabWidth * index,
+            useNativeDriver: true,
+        }).start();
+    };
+
     render(){
         const { tabs } = this.props;
         return(
             <View style={styles.container}>
                 {
                     tabs.map(({ name }, key) => (
-                        <TouchableWithoutFeedback {...{key}}>
+                        <TouchableWithoutFeedback onPress={() => this.onPress(key)} {...{key}}>
                             <View style={styles.tab}>
                                 <Icon size={25} {...{name}} />
                             </View>
