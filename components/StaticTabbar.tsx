@@ -26,24 +26,29 @@ export default class StaticTabbar extends React.PureComponent<StaticTabbarProps>
       onPress = (index: number) => {
         const { value, tabs } = this.props;
         const tabWidth = width / tabs.length;
+        
         Animated.sequence([
             ...this.values.map(value => Animated.timing(value, {
                 toValue: 0,
-                duration: 100,
+                duration: 10,
                 useNativeDriver: true
             })),
             Animated.parallel([
                 Animated.spring(this.values[index], {
                     toValue: 1,
+                    speed : 10,
                     useNativeDriver: true
                 }),
                 Animated.spring(value, {
                     toValue: -width + tabWidth * index,
+                    speed : 10,
                     useNativeDriver: true,
                 })
             ])
 
         ]).start();
+        
+
       }
 
 	render() {
@@ -105,16 +110,18 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	tab: {
-		flex: 1,
+        flex: 1,
+        marginHorizontal: 20,
 		justifyContent: 'center',
 		alignItems: 'center',
 		height: 64,
 	},
 	activeIcon: {
+        marginBottom: 20,
 		backgroundColor: 'white',
-		width: 40,
-		height: 40,
-		borderRadius: 20,
+		width: 50,
+		height: 50,
+		borderRadius: 50,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
