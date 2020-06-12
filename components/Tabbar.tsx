@@ -74,8 +74,8 @@ export default class Tabbar extends React.PureComponent<TabbarProps> {
 	render() {
         const { value: translateX } = this;
 		return (
-			<>
-				<View {...{ width, height }}>
+			< >
+				<View  style={styles.tabbar} {...{ width, height }}>
 					<AnimatedSvg width={width * 2.5} style={{transform : [{ translateX }] }} {...{ height }}>
 						<Path {...{ d }} fill="white" />
 					</AnimatedSvg>
@@ -92,5 +92,9 @@ export default class Tabbar extends React.PureComponent<TabbarProps> {
 const styles = StyleSheet.create({
 	safeArea: {
 		backgroundColor: '#F23122',
-	},
+    },
+    tabbar: {
+        position: 'absolute',
+        bottom: 0
+    }
 });
