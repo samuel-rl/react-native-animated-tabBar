@@ -37,11 +37,13 @@ export default class StaticTabbar extends React.PureComponent<StaticTabbarProps>
                 Animated.spring(this.values[index], {
                     toValue: 1,
                     speed : 10,
+                    bounciness: 10,
                     useNativeDriver: true
                 }),
                 Animated.spring(value, {
                     toValue: -width + tabWidth * index,
-                    speed : 10,
+                    speed : 20,
+                    bounciness: 500,
                     useNativeDriver: true,
                 })
             ])
@@ -76,13 +78,13 @@ export default class StaticTabbar extends React.PureComponent<StaticTabbarProps>
 						<React.Fragment {...{ key }}>
 							<TouchableWithoutFeedback onPress={() => this.onPress(key)}>
 								<Animated.View style={[styles.tab, { opacity }]}>
-									<Icon size={25} {...{ name }} />
+									<Icon size={28} {...{ name }} />
 								</Animated.View>
 							</TouchableWithoutFeedback>
 							<Animated.View
 								style={{
 									position: 'absolute',
-									top: -8,
+									top: -5,
 									width: tabWidth,
 									left: tabWidth * key,
 									height: tabHeight,
@@ -94,7 +96,7 @@ export default class StaticTabbar extends React.PureComponent<StaticTabbarProps>
 								}}
 							>
 								<View style={styles.activeIcon}>
-									<Icon size={25} {...{ name }} />
+									<Icon size={27} {...{ name }} />
 								</View>
 							</Animated.View>
 						</React.Fragment>
@@ -107,7 +109,7 @@ export default class StaticTabbar extends React.PureComponent<StaticTabbarProps>
 
 const styles = StyleSheet.create({
 	container: {
-		flexDirection: 'row',
+        flexDirection: 'row',
 	},
 	tab: {
         flex: 1,
@@ -117,10 +119,10 @@ const styles = StyleSheet.create({
 		height: 64,
 	},
 	activeIcon: {
-        marginBottom: 20,
+        marginBottom: 21,
 		backgroundColor: 'white',
-		width: 50,
-		height: 50,
+		width: 52,
+		height: 52,
 		borderRadius: 50,
 		justifyContent: 'center',
 		alignItems: 'center',

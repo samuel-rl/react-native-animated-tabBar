@@ -9,13 +9,13 @@ const { width } = Dimensions.get('window');
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 const tabs = [
 	{
-		name: 'grid',
+		name: 'activity',
 	},
 	{
-		name: 'list',
+		name: 'plus-circle',
 	},
 	{
-		name: 'repeat',
+		name: 'home',
 	},
 	{
 		name: 'map',
@@ -39,14 +39,14 @@ const tab = shape
 	.x((d) => d.x)
 	.y((d) => d.y)
 	.curve(shape.curveBasis)([
-	{ x: width, y: 0 },
-	{ x: width + 5, y: 0 },
-	{ x: width + 10, y: 10 },
-	{ x: width + 15, y: height },
-	{ x: width + tabWidth - 15, y: height },
-	{ x: width + tabWidth - 10, y: 10 },
-	{ x: width + tabWidth - 5, y: 0 },
-	{ x: width  + tabWidth, y: 0 },
+    { x: width - 35, y: 0 },
+    { x: width - 5, y: 2 },
+
+	{ x: width, y: height-10 },
+    { x: width + tabWidth, y: height-10 },
+    
+    { x: width + tabWidth + 5, y: 2 },
+	{ x: width + tabWidth + 35, y: 0 },
 ]);
 
 
@@ -56,21 +56,14 @@ const right = shape
 	.x((d) => d.x)
 	.y((d) => d.y)([
 	{ x: width + tabWidth, y: 0 },
-	{ x: width * 2, y: 0 },
-	{ x: width * 2, y: height },
+	{ x: width * 20, y: 0 },
+	{ x: width * 20, y: height },
 	{ x: 0, y: height },
 	{ x: 0, y: 0 },
 ]);
 
 const d = `${left} ${tab} ${right}`;
 
-console.log([
-	{ x: width + tabWidth, y: 0 },
-	{ x: width * 2, y: 0 },
-	{ x: width * 2, y: height },
-	{ x: 0, y: height },
-	{ x: 0, y: 0 },
-])
 
 interface TabbarProps {}
 
